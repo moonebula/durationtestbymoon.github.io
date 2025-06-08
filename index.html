@@ -1,66 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>Loading Animation Experiment</title>
-<link rel="stylesheet" href="css/loader.css">
-<head>
-<meta charset="utf-8">
-<title>Loading Experiment</title>
+<title>Loading-Demo (1 Hz / 12 s)</title>
 <style>
-/* ====== 通用样式 ====== */
-body{font-family:sans-serif;text-align:center;margin:0}
-#loader{width:40px;height:40px;border-radius:50%;background:#38e;margin:12vh auto}
+  /* ——— 整体布局 ——— */
+  body{margin:0;font-family:sans-serif;background:#fff;display:flex;
+       flex-direction:column;align-items:center;justify-content:center;
+       height:100vh;text-align:center;}
 
-/* == 1 Hz 恒定 == */
-.freq1.steady{
-  animation:jump1 1s infinite cubic-bezier(.36,.07,.19,.97);
-}
-@keyframes jump1{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-80px)}
-  100%{transform:translateY(0)}
-}
+  /* ——— 小球样式与 1 Hz 跳动动画 ——— */
+  #dot{
+    width:48px;height:48px;border-radius:50%;
+    background:#4f8dff;
+    animation:jump 1s infinite cubic-bezier(.36,.07,.19,.97);
+  }
+  @keyframes jump{
+    0%   {transform:translateY(0)}
+    50%  {transform:translateY(-90px)}
+    100% {transform:translateY(0)}
+  }
 
-/* == 1 Hz 抖动 == */
-.freq1.jitter{
-  animation:jumpVar1 1s infinite steps(1);
-}
-@keyframes jumpVar1{
-  0%{transform:translateY(0)}
-  40%{transform:translateY(-80px)}
-  60%{transform:translateY(0)}
-  100%{transform:translateY(0)}
-}
-
-/* == 3 Hz 恒定 == */
-.freq3.steady{
-  animation:jump3 0.333s infinite cubic-bezier(.36,.07,.19,.97);
-}
-@keyframes jump3{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-80px)}
-}
-
-/* == 3 Hz 抖动 == */
-.freq3.jitter{
-  animation:jumpVar3 0.333s infinite steps(1);
-}
-@keyframes jumpVar3{
-  0%{transform:translateY(0)}
-  35%{transform:translateY(-80px)}
-  65%{transform:translateY(0)}
-  100%{transform:translateY(0)}
-}
+  /* ——— 提示文字，默认隐藏 ——— */
+  #msg{margin-top:48px;font-size:18px;color:#333;opacity:0;transition:opacity .4s;}
+  #msg.show{opacity:1;}
 </style>
 </head>
-<body>
-<div id="wrapper">
-  <div id="loader" class="freq1 steady"></div> <!-- CSS 动画占位 -->
-  <p id="msg">请等待加载完成…</p>
-  <button id="skip" disabled>跳过等待</button>
-</div>
 
-<script src="js/exp.js"></script>
+<body>
+
+  <div id="dot"></div>
+  <div id="msg">Loading…</div>
+
+<script>
+/* ====== 计时逻辑 ====== */
+const TOTAL = 12000;          // 动画总时长 (ms)
+const SHOW_PROMPT_AT = TOTAL * 0.20;   // 20 % 时出现提示
+
+/* 2.4 s 后显示提示文字 */
+setTimeout(()=> document.getElementById('msg').classList.add('show'), SHOW_PROMPT_AT);
+
+/* 12 s 后自动跳转到感谢页（可改链接） */
+setTimeout(()=> location.href = 'thanks.html', TOTAL);
+</script>
+
 </body>
 </html>
