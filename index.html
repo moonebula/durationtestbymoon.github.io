@@ -4,11 +4,54 @@
 <meta charset="utf-8">
 <title>Loading Animation Experiment</title>
 <link rel="stylesheet" href="css/loader.css">
+<head>
+<meta charset="utf-8">
+<title>Loading Experiment</title>
 <style>
-  body{font-family:sans-serif;text-align:center;margin:0;padding:0;}
-  #wrapper{margin-top:12vh;}
-  #msg{margin:40px;font-size:18px;}
-  button{padding:12px 36px;font-size:16px;}
+/* ====== 通用样式 ====== */
+body{font-family:sans-serif;text-align:center;margin:0}
+#loader{width:40px;height:40px;border-radius:50%;background:#38e;margin:12vh auto}
+
+/* == 1 Hz 恒定 == */
+.freq1.steady{
+  animation:jump1 1s infinite cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes jump1{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-80px)}
+  100%{transform:translateY(0)}
+}
+
+/* == 1 Hz 抖动 == */
+.freq1.jitter{
+  animation:jumpVar1 1s infinite steps(1);
+}
+@keyframes jumpVar1{
+  0%{transform:translateY(0)}
+  40%{transform:translateY(-80px)}
+  60%{transform:translateY(0)}
+  100%{transform:translateY(0)}
+}
+
+/* == 3 Hz 恒定 == */
+.freq3.steady{
+  animation:jump3 0.333s infinite cubic-bezier(.36,.07,.19,.97);
+}
+@keyframes jump3{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-80px)}
+}
+
+/* == 3 Hz 抖动 == */
+.freq3.jitter{
+  animation:jumpVar3 0.333s infinite steps(1);
+}
+@keyframes jumpVar3{
+  0%{transform:translateY(0)}
+  35%{transform:translateY(-80px)}
+  65%{transform:translateY(0)}
+  100%{transform:translateY(0)}
+}
 </style>
 </head>
 <body>
