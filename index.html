@@ -2,46 +2,82 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>Loading-Demo (1 Hz / 12 s)</title>
+<title>Loading Demo (1 Hz, 12 s)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-  /* ——— 整体布局 ——— */
-  body{margin:0;font-family:sans-serif;background:#fff;display:flex;
-       flex-direction:column;align-items:center;justify-content:center;
-       height:100vh;text-align:center;}
-
-  /* ——— 小球样式与 1 Hz 跳动动画 ——— */
-  #dot{
-    width:48px;height:48px;border-radius:50%;
-    background:#4f8dff;
-    animation:jump 1s infinite cubic-bezier(.36,.07,.19,.97);
-  }
-  @keyframes jump{
-    0%   {transform:translateY(0)}
-    50%  {transform:translateY(-90px)}
-    100% {transform:translateY(0)}
+  /* ---- 布局 ---- */
+  :root{--ball-size:7vw;--ball-size-min:64px;}
+  body{
+    margin:0;display:flex;flex-direction:column;align-items:center;
+    justify-content:center;height:100vh;font-family:sans-serif;
+    background:#fff;overflow:hidden;
   }
 
-  /* ——— 提示文字，默认隐藏 ——— */
-  #msg{margin-top:48px;font-size:18px;color:#333;opacity:0;transition:opacity .4s;}
+  /* ---- 小球 ---- */
+  #ball{
+    width:clamp(var(--ball-size-min),var(--ball-size),120px);
+    height:clamp(var(--ball-size-min),var(--ball-size),120px);
+    border-radius:50%;background:#4f8dff;position:relative;
+    animation:bounce 1s infinite;
+  }
+  /* 拖尾伪元素 */
+  #ball::after{
+    content:"";position:absolute;left:0;top:0;width:100%;height:100%;
+    border-radius:inherit;background:#4f8dff;filter:blur(12px);opacity:.4;
+    transform-origin:center bottom;animation:trail 1s infinite;
+  }
+
+  /* 1 Hz 弹跳物理感 keyframes */
+  @keyframes bounce{
+    0%   {transform:translateY(0) scale(1,1);}
+    10%  {transform:translateY(-10vh) scale(1.05,.95);}   /* 抬起稍拉伸 */
+    30%  {transform:translateY(-22vh) scale(.95,1.05);}   /* 高点压扁 */
+    50%  {transform:translateY(0) scale(1,1);}            /* 着地 */
+    60%  {transform:translateY(-6vh)  scale(1.03,.97);}   /* 反弹衰减 */
+    80%  {transform:translateY(0) scale(1,1);}
+    100% {transform:translateY(0) scale(1,1);}
+  }
+  /* 拖尾淡入淡出 */
+  @keyframes trail{
+    0%,50%,100% {opacity:.0;}
+    25%{opacity:.35;}
+  }
+
+  /* ---- 提示文字 ---- */
+  #msg{
+    margin-top:4vh;font-size:clamp(1.2rem,3vw,2rem);color:#333;opacity:0;
+    transition:opacity .4s;
+  }
   #msg.show{opacity:1;}
+
+  /* ---- 跳过按钮 ---- */
+  #skip{
+    margin-top:6vh;padding:1rem 3rem;font-size:clamp(1rem,2.8vw,1.5rem);
+    border:none;border-radius:8px;background:#ff5252;color:#fff;
+    cursor:pointer;opacity:.85;transition:opacity .25s,transform .25s;
+  }
+  #skip:hover{opacity:1;transform:scale(1.04);}
 </style>
 </head>
-
 <body>
 
-  <div id="dot"></div>
+  <div id="ball"></div>
   <div id="msg">Loading…</div>
+  <button id="skip">跳过等待 / Skip</button>
 
 <script>
-/* ====== 计时逻辑 ====== */
-const TOTAL = 12000;          // 动画总时长 (ms)
-const SHOW_PROMPT_AT = TOTAL * 0.20;   // 20 % 时出现提示
+/* === 参数 === */
+const TOTAL      = 12000;           // 总时长 12 s
+const PROMPT_MS  = TOTAL*0.20;      // 20 % 处出现提示
 
-/* 2.4 s 后显示提示文字 */
-setTimeout(()=> document.getElementById('msg').classList.add('show'), SHOW_PROMPT_AT);
+/* === 提示文字延时显示 === */
+setTimeout(()=>document.getElementById('msg').classList.add('show'),PROMPT_MS);
 
-/* 12 s 后自动跳转到感谢页（可改链接） */
-setTimeout(()=> location.href = 'thanks.html', TOTAL);
+/* === 点击跳过 → thank you === */
+document.getElementById('skip').onclick=()=>location.href='thanks.html';
+
+/* === 12 s 自动跳转 === */
+setTimeout(()=>location.href='thanks.html',TOTAL);
 </script>
 
 </body>
