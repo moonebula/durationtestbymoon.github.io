@@ -1,48 +1,46 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="utf-8">
-<title>Loading Demo – 1 Hz / 15 s</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<style>
-  :root {
-    --ball-size-min: 64px;
-    --ball-size-vw: 7vw;
-    --main: #82e0aa;
-  }
-  body {
-    margin: 0; height: 100vh; display: flex; flex-direction: column;
-    justify-content: center; align-items: center; background: #fff;
-    font-family: sans-serif; overflow: hidden; user-select: none; cursor: default;
-  }
+  <meta charset="utf-8">
+  <title>Loading Demo – 1 Hz / 15 s</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    :root {
+      --ball-size-min: 64px;
+      --ball-size-vw: 7vw;
+      --main: #82e0aa;
+    }
+    body {
+      margin: 0; height: 100vh; display: flex; flex-direction: column;
+      justify-content: center; align-items: center; background: #fff;
+      font-family: sans-serif; overflow: hidden; user-select: none; cursor: default;
+    }
 
-  /* 小球弹跳 */
-  #ball {
-    width: clamp(var(--ball-size-min), var(--ball-size-vw), 120px);
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: var(--main);
-    box-shadow: 0 0 20px rgba(79, 141, 255, .35);
-    will-change: transform;
-    animation: bounce 1s infinite;
-  }
+    #ball {
+      width: clamp(var(--ball-size-min), var(--ball-size-vw), 120px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--main);
+      box-shadow: 0 0 20px rgba(79, 141, 255, .35);
+      will-change: transform;
+      animation: bounce 1s infinite;
+    }
 
-  @keyframes bounce {
-    0%   { transform: translateY(0); animation-timing-function: cubic-bezier(.25, .46, .45, .94); }
-    50%  { transform: translateY(-20vh); animation-timing-function: cubic-bezier(.55, .05, .79, .68); }
-    100% { transform: translateY(0); }
-  }
+    @keyframes bounce {
+      0%   { transform: translateY(0); animation-timing-function: cubic-bezier(.25, .46, .45, .94); }
+      50%  { transform: translateY(-20vh); animation-timing-function: cubic-bezier(.55, .05, .79, .68); }
+      100% { transform: translateY(0); }
+    }
 
-  /* Loading 提示 */
-  #msg {
-    margin-top: 4vh;
-    font-size: clamp(1.2rem, 3vw, 2rem);
-    color: #333;
-    opacity: 0;
-    transition: opacity .4s;
-  }
-  #msg.show { opacity: 1; }
-</style>
+    #msg {
+      margin-top: 4vh;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: #333;
+      opacity: 0;
+      transition: opacity .4s;
+    }
+    #msg.show { opacity: 1; }
+  </style>
 </head>
 
 <body>
@@ -51,38 +49,44 @@
   <div id="msg">Loading…</div>
 
 <script>
-const TOTAL_MS   = 15000;             // 动画总时长
-const PROMPT_MS  = TOTAL_MS * 0.20;   // 提示语呈现时机
-const ENABLE_CLK = 5000;              // 允许跳过的时间点
-const FORM_URL   = 'https://docs.google.com/forms/d/e/1FAIpQLSfentry.1026342006/formResponse';
-const ENTRY_ID   = 'entry.1026342006';  // 字段 ID
-const t0         = performance.now();   // 启动时间戳
+  const TOTAL_MS   = 15000;
+  const PROMPT_MS  = TOTAL_MS * 0.20;
+  const ENABLE_CLK = 5000;
 
-// 显示“Loading...”文本
-setTimeout(() => {
-  document.getElementById('msg').classList.add('show');
-}, PROMPT_MS);
+  // ✅ 正确设置 Google Forms 提交地址（请替换为你真实的 Form URL）
+  const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfABC123XYZ456/formResponse';
+  const ENTRY_ID = 'entry.1026342006';
 
-// 提交数据至 Google Forms 并跳转
-function goThanks() {
-  const rt = Math.round(performance.now() - t0);  // 毫秒取整
-  const formData = new FormData();
-  formData.append(ENTRY_ID, rt);
-  fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body: formData });
-  location.href = 'thanks.html';
-}
+  const t0 = performance.now();
 
-// 检查点击是否满足条件
-function trySkip() {
-  if (performance.now() - t0 >= ENABLE_CLK) goThanks();
-}
+  setTimeout(() => {
+    document.getElementById('msg').classList.add('show');
+  }, PROMPT_MS);
 
-// 监听事件
-document.body.addEventListener('click', trySkip, { passive: true });
-document.body.addEventListener('touchstart', trySkip, { passive: true });
+  function goThanks() {
+    const rt = Math.round(performance.now() - t0);
+    const formData = new FormData();
+    formData.append(ENTRY_ID, rt);
 
-// 超时自动跳转
-setTimeout(goThanks, TOTAL_MS);
+    // ✅ 提交数据
+    fetch(FORM_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: formData
+    });
+
+    // 跳转
+    location.href = 'thanks.html';
+  }
+
+  function trySkip() {
+    if (performance.now() - t0 >= ENABLE_CLK) goThanks();
+  }
+
+  document.body.addEventListener('click', trySkip, { passive: true });
+  document.body.addEventListener('touchstart', trySkip, { passive: true });
+
+  setTimeout(goThanks, TOTAL_MS);
 </script>
 
 </body>
