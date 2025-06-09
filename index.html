@@ -33,20 +33,6 @@
     animation:bounce 1s infinite;
     position:relative;
   }
-
-  /* 拖尾（若仍卡顿，可整段删除） */
-  #ball::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    border-radius:inherit;
-    background:#4f8dff;
-    opacity:.35;
-    filter:blur(6px);          /* 适度模糊 */
-    transform:translateZ(0);   /* GPU 加速 */
-    animation:trail 1s infinite;
-  }
-
   /* 弹跳：仅 3 个关键点 */
   @keyframes bounce{
     0%{
