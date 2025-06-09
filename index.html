@@ -27,16 +27,21 @@
     transform-origin:center bottom;animation:trail 1s infinite;
   }
 
-  /* 1 Hz 弹跳物理感 keyframes */
-  @keyframes bounce{
-    0%   {transform:translateY(0) scale(1,1);}
-    10%  {transform:translateY(-10vh) scale(1.05,.95);}   /* 抬起稍拉伸 */
-    30%  {transform:translateY(-22vh) scale(.95,1.05);}   /* 高点压扁 */
-    50%  {transform:translateY(0) scale(1,1);}            /* 着地 */
-    60%  {transform:translateY(-6vh)  scale(1.03,.97);}   /* 反弹衰减 */
-    80%  {transform:translateY(0) scale(1,1);}
-    100% {transform:translateY(0) scale(1,1);}
-  }
+/* —— 1 Hz 自然弹跳（无挤压） —— */
+@keyframes bounce{
+  /* 起点：地面 */
+  0%   {transform:translateY(0);}               /* t = 0 s */
+  /* 上升：ease-out（先快后慢） */
+  20%  {transform:translateY(-10vh);}           /* 0.2 s */
+  40%  {transform:translateY(-18vh);}           /* 0.4 s */
+  /* 顶点：速度≈0 */
+  50%  {transform:translateY(-20vh);}           /* 0.5 s */
+  /* 下落：ease-in（先慢后快） */
+  60%  {transform:translateY(-18vh);}           /* 0.6 s */
+  80%  {transform:translateY(-10vh);}           /* 0.8 s */
+  /* 回到底线，准备下一循环 */
+  100% {transform:translateY(0);}               /* 1.0 s */
+}
   /* 拖尾淡入淡出 */
   @keyframes trail{
     0%,50%,100% {opacity:.0;}
