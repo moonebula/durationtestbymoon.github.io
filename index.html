@@ -2,58 +2,44 @@
 <html lang="zh">
 <head>
 <meta charset="utf-8">
-<title>Loading Demo – 1 Hz / 12 s</title>
+<title>Loading Demo – 1 Hz / 15 s</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
   :root{
-    --ball-size-min:64px;   /* 最小直径 */
-    --ball-size-vw:7vw;     /* 相对屏宽比例 */
+    --ball-size-min:64px;
+    --ball-size-vw:7vw;
+    --main-color:#008000;
   }
-
-  /* 布局：垂直居中 */
   body{
     margin:0;
+    height:100vh;
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    height:100vh;
     background:#fff;
     font-family:sans-serif;
     overflow:hidden;
   }
 
-  /* 小球 */
+  /* ——— 小球动画 ——— */
   #ball{
     width:clamp(var(--ball-size-min),var(--ball-size-vw),120px);
     aspect-ratio:1;
     border-radius:50%;
-    background:#4f8dff;
+    background:var(--main-color);
     will-change:transform;
     animation:bounce 1s infinite;
-    position:relative;
   }
-  /* 弹跳：仅 3 个关键点 */
   @keyframes bounce{
-    0%{
-      transform:translateY(0);
-      animation-timing-function:cubic-bezier(.25,.46,.45,.94); /* ease-out */
-    }
-    50%{
-      transform:translateY(-20vh);
-      animation-timing-function:cubic-bezier(.55,.05,.79,.68); /* ease-in */
-    }
-    100%{
-      transform:translateY(0);
-    }
-  }
-  /* 拖尾淡入淡出 */
-  @keyframes trail{
-    0%,50%,100%{opacity:0;}
-    25%{opacity:.35;}
+    0%{transform:translateY(0);
+        animation-timing-function:cubic-bezier(.25,.46,.45,.94);}
+    50%{transform:translateY(-20vh);
+        animation-timing-function:cubic-bezier(.55,.05,.79,.68);}
+    100%{transform:translateY(0);}
   }
 
-  /* 提示词 */
+  /* ——— 提示文字 ——— */
   #msg{
     margin-top:4vh;
     font-size:clamp(1.2rem,3vw,2rem);
@@ -63,20 +49,29 @@
   }
   #msg.show{opacity:1;}
 
-  /* 跳过按钮 */
+  /* ——— skip 按钮 ——— */
   #skip{
-    margin-top:6vh;
-    padding:1rem 3rem;
-    font-size:clamp(1rem,2.8vw,1.5rem);
-    border:none;
+    margin-top:5vh;
+    padding:.8rem 2.8rem;
+    font-size:clamp(.9rem,2.6vw,1.3rem);
+    border:1px solid rgba(0,0,0,.35);
+    background:transparent;
+    color:rgba(0,0,0,.35);
     border-radius:8px;
-    background:#ff5252;
-    color:#fff;
-    cursor:pointer;
-    opacity:.85;
-    transition:opacity .25s,transform .25s;
+    font-weight:300;
+    opacity:0;                /* 初始隐藏 */
+    pointer-events:none;       /* 初始不可点 */
+    transition:opacity .7s;
   }
-  #skip:hover{opacity:1;transform:scale(1.04);}
+  #skip.show{
+    opacity:.55;              /* 5 s 后渐显 */
+    pointer-events:auto;
+  }
+  #skip:hover{
+    opacity:.75;
+    border-color:rgba(0,0,0,.5);
+    color:rgba(0,0,0,.5);
+  }
 </style>
 </head>
 
@@ -84,19 +79,28 @@
 
   <div id="ball"></div>
   <div id="msg">Loading…</div>
-  <button id="skip">跳过等待 / Skip</button>
+  <button id="skip">skip</button>
 
 <script>
-/* ===== 参数 ===== */
-const TOTAL_MS     = 12000;             // 总时长 12 s
-const PROMPT_DELAY = TOTAL_MS * 0.20;   // 20 % 处显示提示
+/* ===== 时间参数 ===== */
+const TOTAL_MS     = 15000;          // 总时长 15 s
+const PROMPT_MS    = TOTAL_MS * 0.20; // 20 % 处显示 Loading…
+const SKIP_APPEAR  = 5000;           // 5 s 后才能点击 skip
 
-/* 显示提示文字 */
-setTimeout(()=>document.getElementById('msg').classList.add('show'), PROMPT_DELAY);
+/* ----- 提示文字 ----- */
+setTimeout(()=>{
+  document.getElementById('msg').classList.add('show');
+}, PROMPT_MS);
 
-/* 点击 skip 或 12 s 到时 → 感谢页 */
+/* ----- skip 按钮在 5 s 后淡入并启用 ----- */
+const skipBtn = document.getElementById('skip');
+setTimeout(()=>{
+  skipBtn.classList.add('show');
+}, SKIP_APPEAR);
+
+/* 点击或到时 → 跳转感谢页 */
 const goThanks = ()=>location.href='thanks.html';
-document.getElementById('skip').onclick = goThanks;
+skipBtn.onclick = goThanks;
 setTimeout(goThanks, TOTAL_MS);
 </script>
 
