@@ -5,37 +5,43 @@
 <title>Loading Demo – 1 Hz / 15 s</title>
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <style>
-  :root{--ball-size-min:64px;--ball-size-vw:7vw;--main:#82e0aa;}
-  body{
-    margin:0;height:100vh;display:flex;flex-direction:column;
-    justify-content:center;align-items:center;background:#fff;
-    font-family:sans-serif;overflow:hidden;user-select:none;cursor:default;
+  :root {
+    --ball-size-min: 64px;
+    --ball-size-vw: 7vw;
+    --main: #82e0aa;
+  }
+  body {
+    margin: 0; height: 100vh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center; background: #fff;
+    font-family: sans-serif; overflow: hidden; user-select: none; cursor: default;
   }
 
-  /* 小球 1 Hz 弹跳 */
- #ball{
-  width:clamp(var(--ball-size-min),var(--ball-size-vw),120px);
-  aspect-ratio:1;
-  border-radius:50%;
-  background:var(--main);
-  box-shadow:0 0 20px rgba(79,141,255,.35);   /* 柔化边缘 */
-  will-change:transform;
-  animation:bounce 1s infinite;
-}
-  @keyframes bounce{
-    0%  {transform:translateY(0);
-         animation-timing-function:cubic-bezier(.25,.46,.45,.94);} /* ease-out */
-    50% {transform:translateY(-20vh);
-         animation-timing-function:cubic-bezier(.55,.05,.79,.68);} /* ease-in */
-    100%{transform:translateY(0);}
+  /* 小球弹跳 */
+  #ball {
+    width: clamp(var(--ball-size-min), var(--ball-size-vw), 120px);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--main);
+    box-shadow: 0 0 20px rgba(79, 141, 255, .35);
+    will-change: transform;
+    animation: bounce 1s infinite;
   }
 
-  /* “Loading…” 提示 */
-  #msg{
-    margin-top:4vh;font-size:clamp(1.2rem,3vw,2rem);
-    color:#333;opacity:0;transition:opacity .4s;
+  @keyframes bounce {
+    0%   { transform: translateY(0); animation-timing-function: cubic-bezier(.25, .46, .45, .94); }
+    50%  { transform: translateY(-20vh); animation-timing-function: cubic-bezier(.55, .05, .79, .68); }
+    100% { transform: translateY(0); }
   }
-  #msg.show{opacity:1;}
+
+  /* Loading 提示 */
+  #msg {
+    margin-top: 4vh;
+    font-size: clamp(1.2rem, 3vw, 2rem);
+    color: #333;
+    opacity: 0;
+    transition: opacity .4s;
+  }
+  #msg.show { opacity: 1; }
 </style>
 </head>
 
@@ -45,36 +51,37 @@
   <div id="msg">Loading…</div>
 
 <script>
-/* ===== 时间参数 ===== */
-const TOTAL_MS    = 15000;            // 动画总时长 15 s
-const PROMPT_MS   = TOTAL_MS * 0.20;  // 20 % 时出现文本
-const ENABLE_CLK  = 5000;             // 5 s 后允许跳过
+const TOTAL_MS   = 15000;             // 动画总时长
+const PROMPT_MS  = TOTAL_MS * 0.20;   // 提示语呈现时机
+const ENABLE_CLK = 5000;              // 允许跳过的时间点
+const FORM_URL   = 'https://docs.google.com/forms/d/e/entry.1026342006/formResponse';
+const ENTRY_ID   = 'entry.1026342006';  // 字段 ID
+const t0         = performance.now();   // 启动时间戳
 
-/* 计时起点 */
-const t0 = performance.now();
-
-/* 20 % 时显示 “Loading…” */
+// 显示“Loading...”文本
 setTimeout(() => {
   document.getElementById('msg').classList.add('show');
 }, PROMPT_MS);
 
-/* 跳转函数 —— 如需把 rt 写入 Google Forms，可在这里扩展 */
+// 提交数据至 Google Forms 并跳转
 function goThanks() {
-  const rt = performance.now() - t0;          // T-threshold（毫秒）
-  // TODO: fetch() 把 rt 传给 Google Forms…
+  const rt = Math.round(performance.now() - t0);  // 毫秒取整
+  const formData = new FormData();
+  formData.append(ENTRY_ID, rt);
+  fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body: formData });
   location.href = 'thanks.html';
 }
 
-/* 点击／触摸尝试跳过：5 s 之前点击无效 */
+// 检查点击是否满足条件
 function trySkip() {
   if (performance.now() - t0 >= ENABLE_CLK) goThanks();
 }
 
-/* 监听桌面 click 与移动 touchstart */
-document.body.addEventListener('click',      trySkip, { passive: true });
+// 监听事件
+document.body.addEventListener('click', trySkip, { passive: true });
 document.body.addEventListener('touchstart', trySkip, { passive: true });
 
-/* 15 s 自动跳转 */
+// 超时自动跳转
 setTimeout(goThanks, TOTAL_MS);
 </script>
 
