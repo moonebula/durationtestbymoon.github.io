@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>加载节奏实验 · 入口</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --main-color:#4f8dff;
+  }
+  body{
+    margin:0;
+    height:100vh;
+    background:#f5f7fa;
+    color:#333;
+    font-family:sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    line-height:1.6;
+    padding:0 6vw;
+  }
+  h1{font-size:clamp(1.6rem,5vw,2.4rem);margin-bottom:2vh;}
+  p {font-size:clamp(1rem,3.4vw,1.25rem);margin:0 0 4vh;}
+  button{
+    padding:1rem 4rem;
+    font-size:clamp(1.1rem,4vw,1.5rem);
+    color:#fff;
+    background:var(--main-color);
+    border:none;border-radius:10px;
+    cursor:pointer;
+    transition:transform .25s,box-shadow .25s;
+  }
+  button:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 16px rgba(0,0,0,.15);
+  }
+</style>
+</head>
+<body>
+
+  <h1>加载节奏感知实验</h1>
+  <p>在下一页，您将看到一段加载动画。<br>
+     动画播放过程中，屏幕上会出现“跳过等待”按钮。<br>
+     您可随时点击跳过，或等待动画自然结束。</p>
+
+  <button onclick="location.href='index.html'">开始实验 / Start</button>
+
+</body>
+</html>
