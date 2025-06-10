@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <title>Loading Demo – 1Hz | Intro at 2s | Chaos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    :root {
+      --ball-size-min: 64px;
+      --ball-size-vw: 7vw;
+      --main: #82e0aa;
+    }
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      font-family: sans-serif;
+      overflow: hidden;
+      user-select: none;
+      cursor: default;
+    }
+    #ball {
+      width: clamp(var(--ball-size-min), var(--ball-size-vw), 120px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--main);
+      box-shadow: 0 0 20px rgba(79, 141, 255, .35);
+      will-change: transform;
+      animation: bounce 1s infinite;
+    }
+    @keyframes bounce {
+      0%   { transform: translateY(0); animation-timing-function: cubic-bezier(.3, .05, .7, .9); }
+      15%  { transform: translateY(-8vh); animation-timing-function: linear; }
+      30%  { transform: translateY(0); animation-timing-function: ease-in; }
+      50%  { transform: translateY(-20vh); animation-timing-function: ease-out; }
+      60%  { transform: translateY(-15vh); animation-timing-function: ease-in-out; }
+      70%  { transform: translateY(-18vh); animation-timing-function: ease-in; }
+      85%  { transform: translateY(0); animation-timing-function: cubic-bezier(.5, 0, .1, 1); }
+      100% { transform: translateY(0); }
+    }
+    #msg {
+      margin-top: 4vh;
+      font-size: clamp(1.2rem, 3vw, 2rem);
+      color: #333;
+      opacity: 0;
+      transition: opacity .4s;
+    }
+    #msg.show {
+      opacity: 1;
+    }
+    #gform {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="ball"></div>
+  <div id="msg">Loading…</div>
+
+  <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse" method="POST" target="hidden_iframe">
+    <input name="entry.1026342006" id="rtInput" type="hidden">
+  </form>
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+<script>
+  const TOTAL_MS   = 15000;
+  const PROMPT_MS  = 2000; // ← Loading 文本在第 2 秒出现
+  const ENABLE_CLK = 5000;
+  const t0         = performance.now();
+  let submitted    = false;
+
+  // 从 URL 中读取参数
+  const urlParams = new URLSearchParams(window.location.search);
+  const age = urlParams.get("age") || "NA";
+  const gender = urlParams.get("gender") || "NA";
+
+  // 显示“Loading...”文本
+  setTimeout(() => {
+    document.getElementById('msg').classList.add('show');
+  }, PROMPT_MS);
+
+  function goThanks() {
+    if (submitted) return;
+    submitted = true;
+
+    const rt = Math.round(performance.now() - t0);
+    const result = `${rt}ms|${age}|${gender}`;
+    document.getElementById('rtInput').value = result;
+
+    const form = document.getElementById('gform');
+    form.submit();
+
+    setTimeout(() => {
+      window.location.href = 'thanks.html';
+    }, 1000);
+  }
+
+  function trySkip() {
+    if (performance.now() - t0 >= ENABLE_CLK) goThanks();
+  }
+
+  if ('ontouchstart' in window) {
+    document.body.addEventListener('touchstart', trySkip, { passive: true });
+  } else {
+    document.body.addEventListener('click', trySkip, { passive: true });
+  }
+
+  setTimeout(goThanks, TOTAL_MS);
+</script>
+
+</body>
+</html>
