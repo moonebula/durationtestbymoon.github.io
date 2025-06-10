@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <title>Loading Demo – 1 Hz / 15 s</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     :root {
       --ball-size-min: 64px;
@@ -11,11 +11,18 @@
       --main: #82e0aa;
     }
     body {
-      margin: 0; height: 100vh; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; background: #fff;
-      font-family: sans-serif; overflow: hidden; user-select: none; cursor: default;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      font-family: sans-serif;
+      overflow: hidden;
+      user-select: none;
+      cursor: default;
     }
-
     #ball {
       width: clamp(var(--ball-size-min), var(--ball-size-vw), 120px);
       aspect-ratio: 1;
@@ -25,13 +32,11 @@
       will-change: transform;
       animation: bounce 1s infinite;
     }
-
     @keyframes bounce {
-      0%   { transform: translateY(0); animation-timing-function: cubic-bezier(.25, .46, .45, .94); }
-      50%  { transform: translateY(-20vh); animation-timing-function: cubic-bezier(.55, .05, .79, .68); }
+      0% { transform: translateY(0); animation-timing-function: cubic-bezier(.25, .46, .45, .94); }
+      50% { transform: translateY(-20vh); animation-timing-function: cubic-bezier(.55, .05, .79, .68); }
       100% { transform: translateY(0); }
     }
-
     #msg {
       margin-top: 4vh;
       font-size: clamp(1.2rem, 3vw, 2rem);
@@ -39,7 +44,13 @@
       opacity: 0;
       transition: opacity .4s;
     }
-    #msg.show { opacity: 1; }
+    #msg.show {
+      opacity: 1;
+    }
+    /* 隐藏 iframe 表单 */
+    #gform {
+      display: none;
+    }
   </style>
 </head>
 
@@ -48,46 +59,53 @@
   <div id="ball"></div>
   <div id="msg">Loading…</div>
 
-  <!-- ✅ 隐藏表单（用于提交 T-threshold） -->
-  <form id="gform"
-        action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse"
-        method="POST"
-        target="hidden_iframe"
-        style="display: none;">
-    <input name="entry.1026342006" id="rtInput" type="text">
+  <!-- 表单：模拟手动填写并提交 -->
+  <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse" method="POST" target="hidden_iframe">
+    <input name="entry.1026342006" id="rtInput" type="hidden">
   </form>
-  <iframe name="hidden_iframe" style="display: none;"></iframe>
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-  const TOTAL_MS   = 15000;
-  const PROMPT_MS  = TOTAL_MS * 0.20;
-  const ENABLE_CLK = 5000;
-  const t0         = performance.now();
+  const TOTAL_MS   = 15000;               // 动画总时长
+  const PROMPT_MS  = TOTAL_MS * 0.20;     // 提示语呈现时机（20%）
+  const ENABLE_CLK = 5000;                // 允许点击跳过的时间点
+  const t0         = performance.now();   // 起始时间
+  let submitted    = false;               // 提交锁
 
+  // 显示“Loading...”文本
   setTimeout(() => {
     document.getElementById('msg').classList.add('show');
   }, PROMPT_MS);
 
+  // 提交 Google Forms 并跳转
   function goThanks() {
+    if (submitted) return;
+    submitted = true;
+
     const rt = Math.round(performance.now() - t0);
     document.getElementById('rtInput').value = rt;
 
-    // 提交表单（兼容移动端）并延迟跳转
     const form = document.getElementById('gform');
     form.submit();
 
     setTimeout(() => {
       window.location.href = 'thanks.html';
-    }, 1000); // 增加延迟，确保移动端 iframe 提交稳定
+    }, 1000); // 等待 1 秒确保提交完成
   }
 
+  // 允许跳过后才触发
   function trySkip() {
     if (performance.now() - t0 >= ENABLE_CLK) goThanks();
   }
 
-  document.body.addEventListener('click', trySkip, { passive: true });
-  document.body.addEventListener('touchstart', trySkip, { passive: true });
+  // 只绑定一个事件以防双触发
+  if ('ontouchstart' in window) {
+    document.body.addEventListener('touchstart', trySkip, { passive: true });
+  } else {
+    document.body.addEventListener('click', trySkip, { passive: true });
+  }
 
+  // 到达总时长后自动跳转
   setTimeout(goThanks, TOTAL_MS);
 </script>
 
