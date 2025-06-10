@@ -89,19 +89,28 @@
     </form>
   </div>
 
-  <script>
-    document.getElementById('introForm').addEventListener('submit', function (e) {
-      e.preventDefault();
-      const age = document.getElementById('age').value.trim();
-      const gender = document.getElementById('gender').value;
+<script>
+  document.getElementById('introForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const age = document.getElementById('age').value.trim();
+    const gender = document.getElementById('gender').value;
 
-      if (age && gender) {
-        const nextURL = `index.html?age=${encodeURIComponent(age)}&gender=${encodeURIComponent(gender)}`;
-        window.location.href = nextURL;
-      } else {
-        alert('Please enter both your age and gender.');
-      }
-    });
-  </script>
+    if (age && gender) {
+      // 所有动画版本文件名列表
+      const animationFiles = [
+        '1IS.html', '1IC.html', '1DS.html', '1DC.html',
+        '2IS.html', '2IC.html', '2DS.html', '2DC.html'
+      ];
+      // 从列表中随机选择一个
+      const randomIndex = Math.floor(Math.random() * animationFiles.length);
+      const selectedFile = animationFiles[randomIndex];
+      // 构建带参数的跳转链接
+      const nextURL = `${selectedFile}?age=${encodeURIComponent(age)}&gender=${encodeURIComponent(gender)}`;
+      window.location.href = nextURL;
+    } else {
+      alert('请填写完整的年龄与性别信息');
+    }
+  });
+</script>
 </body>
 </html>
