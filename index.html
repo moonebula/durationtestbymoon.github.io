@@ -47,7 +47,6 @@
     #msg.show {
       opacity: 1;
     }
-    /* 隐藏 iframe 表单 */
     #gform {
       display: none;
     }
@@ -59,53 +58,54 @@
   <div id="ball"></div>
   <div id="msg">Loading…</div>
 
-  <!-- 表单：模拟手动填写并提交 -->
   <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse" method="POST" target="hidden_iframe">
     <input name="entry.1026342006" id="rtInput" type="hidden">
   </form>
   <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-  const TOTAL_MS   = 15000;               // 动画总时长
-  const PROMPT_MS  = TOTAL_MS * 0.20;     // 提示语呈现时机（20%）
-  const ENABLE_CLK = 5000;                // 允许点击跳过的时间点
-  const t0         = performance.now();   // 起始时间
-  let submitted    = false;               // 提交锁
+  const TOTAL_MS   = 15000;
+  const PROMPT_MS  = TOTAL_MS * 0.20;
+  const ENABLE_CLK = 5000;
+  const t0         = performance.now();
+  let submitted    = false;
+
+  // 从 URL 中读取参数
+  const urlParams = new URLSearchParams(window.location.search);
+  const age = urlParams.get("age") || "NA";
+  const gender = urlParams.get("gender") || "NA";
 
   // 显示“Loading...”文本
   setTimeout(() => {
     document.getElementById('msg').classList.add('show');
   }, PROMPT_MS);
 
-  // 提交 Google Forms 并跳转
   function goThanks() {
     if (submitted) return;
     submitted = true;
 
     const rt = Math.round(performance.now() - t0);
-    document.getElementById('rtInput').value = rt;
+    const result = `${rt}ms|${age}|${gender}`;
+    document.getElementById('rtInput').value = result;
 
     const form = document.getElementById('gform');
     form.submit();
 
     setTimeout(() => {
       window.location.href = 'thanks.html';
-    }, 1000); // 等待 1 秒确保提交完成
+    }, 1000);
   }
 
-  // 允许跳过后才触发
   function trySkip() {
     if (performance.now() - t0 >= ENABLE_CLK) goThanks();
   }
 
-  // 只绑定一个事件以防双触发
   if ('ontouchstart' in window) {
     document.body.addEventListener('touchstart', trySkip, { passive: true });
   } else {
     document.body.addEventListener('click', trySkip, { passive: true });
   }
 
-  // 到达总时长后自动跳转
   setTimeout(goThanks, TOTAL_MS);
 </script>
 
