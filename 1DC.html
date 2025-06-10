@@ -63,11 +63,14 @@
   <div id="ball"></div>
   <div id="msg">Loading…</div>
 
-  <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse" method="POST" target="hidden_iframe">
-    <input name="entry.1026342006" id="rtInput" type="hidden">
-  </form>
-  <iframe name="hidden_iframe" style="display:none;"></iframe>
-
+<form id="gform" 
+      action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse" 
+      method="POST" 
+      target="hidden_iframe">
+  <input name="entry.1026342006" id="rtInput" type="hidden">
+</form>
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+  
 <script>
   const TOTAL_MS   = 15000;
   const PROMPT_MS  = 4000; // ← Loading 文本在第 4 秒出现
@@ -90,7 +93,7 @@
     submitted = true;
 
     const rt = Math.round(performance.now() - t0);
-    const result = `${rt}ms|${age}|${gender}`;
+    const result = `${rt}ms|${age}|${gender}|1DC`;  // ← 加入动画名
     document.getElementById('rtInput').value = result;
 
     const form = document.getElementById('gform');
