@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Choose Your Language</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      text-align: center;
+      padding-top: 15vh;
+    }
+    h1 {
+      margin-bottom: 2rem;
+    }
+    button {
+      display: block;
+      width: 60%;
+      max-width: 320px;
+      margin: 1rem auto;
+      padding: 1rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #82e0aa;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #66cc99;
+    }
+  </style>
+</head>
+<body>
+  <h1>Please Select Your Language</h1>
+
+  <button onclick="location.href='intro_zh.html'">中文 (Chinese)</button>
+  <button onclick="location.href='intro_ko.html'">한국어 (Korean)</button>
+  <button onclick="location.href='intro_en.html'">English</button>
+  <button onclick="location.href='intro_jp.html'">日本語 (Japanese)</button>
+</body>
+</html>
