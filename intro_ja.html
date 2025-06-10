@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>実験案内 - Experiment Introduction</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 4vw;
+      font-family: sans-serif;
+      line-height: 1.6;
+      background: #fdfdfd;
+      color: #333;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    strong {
+      font-weight: bold;
+      color: #000;
+    }
+    label {
+      display: block;
+      margin-top: 1.5rem;
+      font-weight: bold;
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 0.6rem;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      display: block;
+      margin: 3rem auto 1rem;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #82e0aa;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #66cc99;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>実験案内（日本語）</h1>
+
+    <p><strong>ご参加いただきありがとうございます！</strong></p>
+    <p>この実験は、デジタルインターフェースにおける<strong>時間認知のプロセス</strong>を研究することを目的としています。貴重なお時間を割いていただき感謝いたします。</p>
+
+    <p><strong>氏名、IPアドレス、位置情報など、個人を特定できる情報は収集しません</strong>。<strong>アニメーションをスキップした時間（ミリ秒）</strong>のみを匿名で記録します。</p>
+
+    <p>次の画面では<strong>ローディングアニメーション</strong>が表示されます。<strong>長いと感じたら、画面の任意の場所をタップ</strong>してください。</p>
+
+    <p>この実験は<strong>最大15秒で自動的に終了</strong>し、データは自動で送信されます。
+    <br>このページに戻る必要はありません。</p>
+
+    <p><strong>開始前に、深呼吸してリラックスしてください。</strong> 準備ができたら、以下の情報を入力して開始してください。</p>
+
+    <form id="introForm">
+      <label for="age">年齢：</label>
+      <input type="number" id="age" name="age" min="10" max="99" required />
+
+      <label for="gender">性別：</label>
+      <select id="gender" name="gender" required>
+        <option value="" disabled selected>性別を選択してください</option>
+        <option value="male">男性</option>
+        <option value="female">女性</option>
+        <option value="other">その他</option>
+        <option value="noanswer">回答しない</option>
+      </select>
+
+      <button type="submit">実験を開始する</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('introForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const age = document.getElementById('age').value.trim();
+      const gender = document.getElementById('gender').value;
+
+      if (age && gender) {
+        const nextURL = `index.html?age=${encodeURIComponent(age)}&gender=${encodeURIComponent(gender)}`;
+        window.location.href = nextURL;
+      } else {
+        alert('年齢と性別を正しく入力してください。');
+      }
+    });
+  </script>
+</body>
+</html>
