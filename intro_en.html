@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Experiment Introduction - English</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 4vw;
+      font-family: sans-serif;
+      line-height: 1.6;
+      background: #fdfdfd;
+      color: #333;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    strong {
+      font-weight: bold;
+      color: #000;
+    }
+    label {
+      display: block;
+      margin-top: 1.5rem;
+      font-weight: bold;
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 0.6rem;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      display: block;
+      margin: 3rem auto 1rem;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #82e0aa;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #66cc99;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Experiment Introduction (English)</h1>
+
+    <p><strong>Thank you for participating!</strong></p>
+    <p>This experiment aims to study <strong>time perception in digital interfaces</strong>. We appreciate your time and contribution.</p>
+
+    <p><strong>No name, IP, location, or personally identifiable information will be collected</strong>. Only the <strong>time (in milliseconds) when you skip the animation</strong> will be recorded for anonymous analysis.</p>
+
+    <p>On the next screen, you will see a <strong>loading animation</strong>. Please stay focused, and when you <strong>feel it is taking too long and wish to skip</strong>, simply <strong>click anywhere on the screen</strong>.</p>
+
+    <p>The experiment will <strong>automatically end within 15 seconds</strong>, and the data will be submitted automatically.
+    <br>No need to return to this page or fill in anything else.</p>
+
+    <p><strong>Take a deep breath and relax before starting.</strong> When you're ready, please fill in the information below and begin.</p>
+
+    <form id="introForm">
+      <label for="age">Age:</label>
+      <input type="number" id="age" name="age" min="10" max="99" required />
+
+      <label for="gender">Gender:</label>
+      <select id="gender" name="gender" required>
+        <option value="" disabled selected>Select your gender</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+        <option value="other">Other</option>
+        <option value="noanswer">Prefer not to say</option>
+      </select>
+
+      <button type="submit">Start Experiment</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('introForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const age = document.getElementById('age').value.trim();
+      const gender = document.getElementById('gender').value;
+
+      if (age && gender) {
+        const nextURL = `index.html?age=${encodeURIComponent(age)}&gender=${encodeURIComponent(gender)}`;
+        window.location.href = nextURL;
+      } else {
+        alert('Please enter both your age and gender.');
+      }
+    });
+  </script>
+</body>
+</html>
