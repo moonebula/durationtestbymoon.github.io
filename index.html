@@ -48,11 +48,15 @@
   <div id="ball"></div>
   <div id="msg">Loading…</div>
 
-  <!-- 隐藏表单用于提交 -->
-  <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse" method="POST" target="hidden_iframe" style="display:none;">
+  <!-- ✅ 隐藏表单（用于提交 T-threshold） -->
+  <form id="gform"
+        action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse"
+        method="POST"
+        target="hidden_iframe"
+        style="display: none;">
     <input name="entry.1026342006" id="rtInput" type="text">
   </form>
-  <iframe name="hidden_iframe" style="display:none;"></iframe>
+  <iframe name="hidden_iframe" style="display: none;"></iframe>
 
 <script>
   const TOTAL_MS   = 15000;
@@ -67,12 +71,14 @@
   function goThanks() {
     const rt = Math.round(performance.now() - t0);
     document.getElementById('rtInput').value = rt;
-    document.getElementById('gform').submit();
 
-    // 提交后稍等再跳转
+    // 提交表单（兼容移动端）并延迟跳转
+    const form = document.getElementById('gform');
+    form.submit();
+
     setTimeout(() => {
-      location.href = 'thanks.html';
-    }, 300);
+      window.location.href = 'thanks.html';
+    }, 1000); // 增加延迟，确保移动端 iframe 提交稳定
   }
 
   function trySkip() {
