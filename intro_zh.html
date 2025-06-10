@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>实验说明 - 中文版</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 4vw;
+      font-family: sans-serif;
+      line-height: 1.6;
+      background: #fdfdfd;
+      color: #333;
+    }
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    strong {
+      font-weight: bold;
+      color: #000;
+    }
+    label {
+      display: block;
+      margin-top: 1.5rem;
+      font-weight: bold;
+    }
+    select, input[type="number"] {
+      width: 100%;
+      padding: 0.6rem;
+      font-size: 1rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      display: block;
+      margin: 3rem auto 1rem;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      background-color: #82e0aa;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #66cc99;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>实验说明（中文版）</h1>
+
+    <p><strong>感谢您的参与！</strong></p>
+    <p>本实验旨在研究人们在数字界面中的<strong>时间感知过程</strong>。感谢您抽出宝贵时间协助本研究。</p>
+
+    <p>本实验<strong>不会收集您的姓名、IP、位置信息或任何可识别身份的资料</strong>。
+    我们仅记录您<strong>点击跳过动画的时间（毫秒）</strong>，用于匿名统计分析。</p>
+
+    <p>您将在下一页面看到一个<strong>正在加载的动画</strong>。
+    请尽可能保持专注，并在您<strong>主观上觉得“加载时间过长、想跳过”</strong>时，点击屏幕任意位置。</p>
+
+    <p>实验将在<strong>15 秒内自动结束</strong>，数据将自动提交。
+    <br>无需返回此页面或填写其他内容。</p>
+
+    <p>在开始前，请<strong>深呼吸，放松心情</strong>。准备好后，请填写以下信息并点击下方按钮开始实验。</p>
+
+    <form id="introForm">
+      <label for="age">年龄：</label>
+      <input type="number" id="age" name="age" min="10" max="99" required />
+
+      <label for="gender">性别：</label>
+      <select id="gender" name="gender" required>
+        <option value="" disabled selected>请选择</option>
+        <option value="male">男性</option>
+        <option value="female">女性</option>
+        <option value="other">其他</option>
+        <option value="noanswer">不愿回答</option>
+      </select>
+
+      <button type="submit">开始实验</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById('introForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const age = document.getElementById('age').value.trim();
+      const gender = document.getElementById('gender').value;
+
+      if (age && gender) {
+        const nextURL = `index.html?age=${encodeURIComponent(age)}&gender=${encodeURIComponent(gender)}`;
+        window.location.href = nextURL;
+      } else {
+        alert('请填写完整的年龄与性别信息');
+      }
+    });
+  </script>
+</body>
+</html>
