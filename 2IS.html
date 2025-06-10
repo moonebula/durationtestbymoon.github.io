@@ -58,10 +58,13 @@
   <div id="ball"></div>
   <div id="msg">Loading…</div>
 
-  <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse" method="POST" target="hidden_iframe">
-    <input name="entry.1026342006" id="rtInput" type="hidden">
-  </form>
-  <iframe name="hidden_iframe" style="display:none;"></iframe>
+<form id="gform" 
+      action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse" 
+      method="POST" 
+      target="hidden_iframe">
+  <input name="entry.1026342006" id="rtInput" type="hidden">
+</form>
+<iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
   const TOTAL_MS   = 15000;
@@ -84,12 +87,12 @@
     if (submitted) return;
     submitted = true;
 
-    const rt = Math.round(performance.now() - t0);
-    const result = `${rt}ms|${age}|${gender}`;
-    document.getElementById('rtInput').value = result;
+const rt = Math.round(performance.now() - t0);
+const result = `${rt}ms|${age}|${gender}|2IS`; // ← 替换为当前动画页面名
+document.getElementById('rtInput').value = result;
 
-    const form = document.getElementById('gform');
-    form.submit();
+const form = document.getElementById('gform');
+form.submit();
 
     setTimeout(() => {
       window.location.href = 'thanks.html';
