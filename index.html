@@ -48,16 +48,17 @@
   <div id="ball"></div>
   <div id="msg">Loading…</div>
 
+  <!-- 隐藏表单用于提交 -->
+  <form id="gform" action="https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse" method="POST" target="hidden_iframe" style="display:none;">
+    <input name="entry.1026342006" id="rtInput" type="text">
+  </form>
+  <iframe name="hidden_iframe" style="display:none;"></iframe>
+
 <script>
   const TOTAL_MS   = 15000;
   const PROMPT_MS  = TOTAL_MS * 0.20;
   const ENABLE_CLK = 5000;
-
-  // ✅ 正确设置 Google Forms 提交地址（请替换为你真实的 Form URL）
-  const FORM_URL   = 'https://docs.google.com/forms/d/e/1FAIpQLSdVxUZN9cIgZQTmaq2PRr73sGO51Gb4fJ4r6jdKF0-ic7EyxQ/formResponse';
-  const ENTRY_ID   = 'entry.1026342006';
-
-  const t0 = performance.now();
+  const t0         = performance.now();
 
   setTimeout(() => {
     document.getElementById('msg').classList.add('show');
@@ -65,18 +66,13 @@
 
   function goThanks() {
     const rt = Math.round(performance.now() - t0);
-    const formData = new FormData();
-    formData.append(ENTRY_ID, rt);
+    document.getElementById('rtInput').value = rt;
+    document.getElementById('gform').submit();
 
-    // ✅ 提交数据
-    fetch(FORM_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: formData
-    });
-
-    // 跳转
-    location.href = 'thanks.html';
+    // 提交后稍等再跳转
+    setTimeout(() => {
+      location.href = 'thanks.html';
+    }, 300);
   }
 
   function trySkip() {
